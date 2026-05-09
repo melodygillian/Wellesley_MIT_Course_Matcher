@@ -1,0 +1,213 @@
+<!-- By Melody Lyu, April 29, 2026 -->
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.min.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta name="author" content="Melody Lyu">
+  <title>Cross-Registration Scheduler</title>
+</head>
+<body>
+
+<main>
+  <header>
+    <h1>Cross_Registration Scheduler</h1>
+    <p class="subtitle">Wellesley and MIT Cross Registration· Fall 2026</p>
+  </header>
+
+  <!-- Add Course Form -->
+  <section id="add_course_section">
+    <h2>Add a Course to Your Schedule</h2>
+    <form id="add_course_form">
+      <div class="form_row">
+        <label for="course_name">Course Name</label>
+        <input type="text" id="course_name" placeholder="e.g. CS 204 Front_End Web Development">
+      </div>
+      <div class="form_row">
+        <label for="course_category">Category</label>
+        <select id="course_category">
+          <option value="">— Select Category —</option>
+          <option>Mathematics</option>
+          <option>Computer Science</option>
+          <option>Neuroscience</option>
+          <option>Biology</option>
+          <option>Physics</option>
+          <option>Chemistry</option>
+          <option>Economics</option>
+          <option>Psychology</option>
+          <option>History</option>
+          <option>Literature</option>
+          <option>Philosophy</option>
+          <option>Political Science</option>
+          <option>Sociology</option>
+          <option>Art</option>
+          <option>Music</option>
+          <option>Writing</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form_row">
+        <span>Meeting Days</span>
+        <div id="day_checkboxes">
+          <label class="day_label"><input type="checkbox" name="days" value="Mon"> Monday</label>
+          <label class="day_label"><input type="checkbox" name="days" value="Tue"> Tuesday</label>
+          <label class="day_label"><input type="checkbox" name="days" value="Wed"> Wednesday</label>
+          <label class="day_label"><input type="checkbox" name="days" value="Thu"> Thursday</label>
+          <label class="day_label"><input type="checkbox" name="days" value="Fri"> Friday</label>
+        </div>
+      </div>
+      <div class="form_row time_row">
+        <label for="course_start">Start Time</label>
+        <input type="time" id="course_start" min="07:00" max="22:00">
+        <label for="course_end">End Time</label>
+        <input type="time" id="course_end" min="07:00" max="22:00">
+      </div>
+      <div class="form_buttons">
+        <button type="button" id="add_btn">Add to Schedule</button>
+        <button type="button" id="clear_btn">Clear Form</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Weekly Calendar View -->
+  <section id="calendar_section">
+    <h2>Weekly Calendar</h2>
+    <div id="calendar_container">
+      <div id="calendar_grid">
+        <div class="cal_col" id="time_col">
+          <div class="cal_header"></div>
+        </div>
+
+        <!-- Cloning template (hidden) -->
+        <div id="cal_col_template" class="cal_col" style="display:none">
+          <div class="cal_header"></div>
+          <!-- time slots will be added by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Selected Course List -->
+  <section id="course_list_section">
+    <h2>Your Selected Courses</h2>
+    <div id="sort_controls">
+      <span>Sort by:</span>
+      <button type="button" id="sort_name_btn">A–Z</button>
+      <button type="button" id="sort_category_btn">Category</button>
+      <button type="button" id="sort_time_btn">Time</button>
+      <button type="button" id="sort_day_btn">Day</button>
+    </div>
+
+    <ul id="course_list"></ul>
+    
+    <p id="no_courses_msg">No courses added yet.</p>
+  </section>
+
+  <!-- Manage Categories for Dynamic Tags Section -->
+   <section id="manage_tags_section">
+    <h2>Manage Categories!</h2>
+
+    <div id="current_tags"></div>
+
+    <div id="add_tag_form">
+      <div class="form_row">
+        <label for="tag_name">Category Name</label>
+        <input type="text" id="tag_name" placeholder="e.g. Engnineering">
+      </div>
+
+      <div class="form_row">
+        <label for="tag_color">Color</label>
+        <input type="color" id="tag_color" value="#aec6cf">
+      </div>
+
+      <div class="form_buttons">
+        <button type="button" id="add_tag_btn">Add Category</button>
+      </div>
+    </div>
+   </section>
+
+  <!-- MIT Filter Section -->
+  <section id="filter_section">
+    <h2>Find MIT Courses That Fit</h2>
+    <div id="filter_buttons">
+      <button type="button" id="filter_basic_btn">
+        🔍 Filter MIT courses that fit my schedule
+      </button>
+      <button type="button" id="filter_loco_btn">
+        🚌 Filter MIT courses that fit my schedule + Loco bus
+      </button>
+    </div>
+    <div id="filter_options">
+      <label for="filter_category">Filter by category (optional):</label>
+      <select id="filter_category">
+        <option value="">All Categories</option>
+        <option>Brain &amp; Cognitive Sciences</option>
+        <option>Electrical Engineering &amp; Computer Science</option>
+        <option>Mathematics</option>
+        <option>Biology</option>
+        <option>Physics</option>
+        <option>Chemistry</option>
+        <option>Economics</option>
+        <option>History</option>
+        <option>Literature</option>
+        <option>Linguistics &amp; Philosophy</option>
+        <option>Political Science</option>
+        <option>Mechanical Engineering</option>
+        <option>Biological Engineering</option>
+        <option>Civil &amp; Environmental Engineering</option>
+        <option>Media Arts &amp; Sciences</option>
+        <option>Health Sciences &amp; Technology</option>
+        <option>Management</option>
+        <option>Writing</option>
+      </select>
+    </div>
+    <div id="filter_results">
+      <h3 id="filter_results_title" style="display:none"></h3>
+      <ul id="mit_results_list"></ul>
+      <p id="no_results_msg" style="display:none">No MIT courses found that fit your schedule.</p>
+    </div>
+  </section>
+
+  <!-- Local Storage Controls -->
+  <section id="storage_section">
+    <h2>Save Your Schedule</h2>
+    <div id="storage_buttons">
+      <button type="button" id="save_local_btn">💾 Save to Local Browser</button>
+      <button type="button" id="load_local_btn">📂 Load from Local Browser</button>
+      <button type="button" id="reset_local_btn">🗑 Clear Local Saved Data</button>
+      <button type="button" id="login_cloud_btn">☁️ Log into Cloud</button>
+      <button type="button" id="save_cloud_btn">🌤️ Save to Cloud</button>
+      <button type="button" id="load_cloud_btn">⛈️ Load from Cloud</button>
+    </div>
+    <p id="storage_status"></p>
+  </section>
+
+</main>
+
+<footer>
+  <ul class="validation_icons">
+    <li><a href="//validator.w3.org/check?uri=referer">
+      <img src="//cs.wellesley.edu/~cs204/Icons/valid-html5v2.png"
+           alt="Valid HTML 5" title="Valid HTML 5" height="31" width="88">
+    </a></li>
+    <li><a href="//jigsaw.w3.org/css-validator/check/referer">
+      <img style="border:0;width:88px;height:31px"
+           src="//cs.wellesley.edu/~cs204/Icons/vcss.gif" alt="Valid CSS!">
+    </a></li>
+  </ul>
+</footer>
+
+<!-- JavaScript at the bottom -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cs.wellesley.edu/~anderson/js/bounds/bounds-plugin.js"></script>
+<script src="mitCourses.js"></script>
+<script src="exchangeBus.js"></script>
+<script src="Course.js"></script>
+<script src="CourseList.js"></script>
+<script src="cloudapi.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
